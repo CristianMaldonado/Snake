@@ -11,7 +11,7 @@
 #define H 64
 #define N 2560
 
-#define PAUSA 150
+
 #define ESCALA 10
 
 typedef struct {
@@ -28,7 +28,7 @@ typedef struct {
 snk snake[N];
 
 frt fruta;
-
+int PAUSA = 150;
 BITMAP *comida, *jugador, *cabeza;
 
 void crear_snake() {
@@ -182,6 +182,7 @@ void input(char campo[V][H], int *tam, int *muerto) {
 		*tam += 1;
 		// regenerar la fruta y agrandar la serpiente
 		snake[*tam - 1].imagen = 'X';
+		PAUSA = PAUSA - 10;
 
 		fruta.x = rand() % (H - 1);
 		fruta.y = rand() % (V - 1);
@@ -207,19 +208,19 @@ void loop(char campo[V][H], int tam) {
 			if(keypressed()) {
 				tecla = readkey() >> 8;
 
-				if(tecla == KEY_S && snake[0].ModY != -1) {
+				if(tecla == KEY_DOWN && snake[0].ModY != -1) {
 					snake[0].ModX = 0;
 					snake[0].ModY = 1;
 			    }
-				if(tecla == KEY_W  && snake[0].ModY != 1) {
+				if(tecla == KEY_UP  && snake[0].ModY != 1) {
 					snake[0].ModX = 0;
 					snake[0].ModY = -1;
 				}
-				if(tecla == KEY_A  && snake[0].ModX != 1) {
+				if(tecla == KEY_LEFT  && snake[0].ModX != 1) {
 					snake[0].ModX = -1;
 					snake[0].ModY = 0;
 				}
-				if(tecla == KEY_D  && snake[0].ModX != -1) {
+				if(tecla == KEY_RIGHT  && snake[0].ModX != -1) {
 					snake[0].ModX = 1;
 					snake[0].ModY = 0;
 				}
@@ -230,7 +231,7 @@ void loop(char campo[V][H], int tam) {
 		}
 
 		update(campo, tam);
-
-		rest(PAUSA);
+		if(PAUSA == 50) rest(50);
+		else rest(PAUSA);
 	} while (muerto == 0 && tecla != KEY_ESC);
 }
